@@ -9,3 +9,86 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  email             String         @unique
+  firstName         String
+  lastName          String
+  displayName       String         @unique
+  birthday          DateTime
+  isAvailable       Boolean        @default(true)
+  password          String
+  profilePictureUrl String?
+  bio               String?
+  rating            Int?
+  createdAt         DateTime       @default(now())
+  myOfferIds        String[]       @db.ObjectId
+  myOffers          Offer[]        @relation(name: "offeredBy")
+  workingOnIds      String[]       @db.ObjectId
+  workingOn         Offer[]        @relation(fields: [workingOnIds], references: [id], name: "workingOn")
+  interestedInIds   String[]       @db.ObjectId
+  interestedIn      Offer[]        @relation(fields: [interestedInIds], references: [id], name: "interestedIn")
+  tagIds            String[]       @db.ObjectId
+  tags              Tag[]          @relation(fields: [tagIds], references: [id], name: "userTags")
+  conversationIds   String[]       @db.ObjectId
+  conversations     Conversation[] @relation(fields: [conversationIds], references: [id], name: "inConversation")
+}
+
+enum OfferStatus {
+  on
+  off
+  fulfilled
+}
+
+enum OfferType {
+  stage
+  cdi
+  cdd
+}
+
+model Offer {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  description     String
+  pictureUrl      String
+  createdAt       DateTime    @default(now())
+  positions       Int         @default(1)
+  salary          Int         @default(1000)
+  startsAt        DateTime    @default(now())
+  endsAt          DateTime?
+  type            OfferType
+  status          OfferStatus @default(on)
+  isOffering      Boolean
+  postedById      String      @db.ObjectId
+  postedBy        User        @relation(fields: [postedById], references: [id], name: "offeredBy")
+  workingOnIds    String[]    @db.ObjectId
+  workingOn       User[]      @relation(fields: [workingOnIds], references: [id], name: "workingOn")
+  interestedInIds String[]    @db.ObjectId
+  interestedIn    User[]      @relation(fields: [interestedInIds], references: [id], name: "interestedIn")
+  tagIds          String[]    @db.ObjectId
+  tags            Tag[]       @relation(fields: [tagIds], references: [id], name: "offerTags")
+}
+
+model Tag {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   @unique
+  hasUserIds  String[] @db.ObjectId
+  hasUsers    User[]   @relation(fields: [hasUserIds], references: [id], name: "userTags")
+  hasOfferIds String[] @db.ObjectId
+  hasOffers   Offer[]  @relation(fields: [hasOfferIds], references: [id], name: "offerTags")
+}
+
+type Message {
+  id                String @db.ObjectId
+  displayName       String
+  profilePictureUrl String
+  message           String
+}
+
+model Conversation {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  participantIds String[]  @db.ObjectId
+  participants   User[]    @relation(fields: [participantIds], references: [id], name: "inConversation")
+  messages       Message[]
+}
