@@ -39,6 +39,18 @@ function createNewUser(tags?: string[]): Prisma.UserCreateInput {
           type: offerTypes[Math.floor(Math.random() * offerTypes.length)],
           endsAt: addMonths(new Date(), 2),
           isOffering: false,
+          tags: randomTag
+            ? {
+                connectOrCreate: [
+                  {
+                    where: { name: randomTag },
+                    create: {
+                      name: randomTag,
+                    },
+                  },
+                ],
+              }
+            : undefined,
         },
         {
           title: faker.person.jobTitle(),
@@ -47,6 +59,18 @@ function createNewUser(tags?: string[]): Prisma.UserCreateInput {
           type: offerTypes[Math.floor(Math.random() * offerTypes.length)],
           endsAt: addMonths(new Date(), 2),
           isOffering: false,
+          tags: randomTag
+            ? {
+                connectOrCreate: [
+                  {
+                    where: { name: randomTag },
+                    create: {
+                      name: randomTag,
+                    },
+                  },
+                ],
+              }
+            : undefined,
         },
       ],
     },
@@ -55,7 +79,7 @@ function createNewUser(tags?: string[]): Prisma.UserCreateInput {
 
 async function seed() {
   console.log("Started seeding...");
-  for await (const i of Array.from(Array(10).keys())) {
+  for await (const i of Array.from(Array(5).keys())) {
     const newUser = await createNewUser(["front", "back", "fullstack"]);
     const createdUser = await prisma.user.create({ data: newUser });
     console.log(
