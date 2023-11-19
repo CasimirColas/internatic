@@ -6,6 +6,7 @@ import { signOut } from "next-auth/react";
 
 function LoginForm() {
   const [loginData, setloginData] = useState({ email: "", password: "" });
+  const [errorMessage, seterrorMessage] = useState("");
   const inputw = "p-2 border border1";
   return (
     <div className="p-4 flex flex-col items-center gap-2">
@@ -31,10 +32,17 @@ function LoginForm() {
         className="p-2 bg-orange-500 text-white w-full"
         onClick={async (e) => {
           e.preventDefault();
-          try {
-            await signIn("credentials", { ...loginData });
-          } catch (error) {
-            console.log("error:", error);
+
+          const req = await signIn("credentials", {
+            ...loginData,
+            redirect: false,
+          });
+          if (req?.error) {
+            seterrorMessage(req.error);
+          }
+          if (req?.ok) {
+            seterrorMessage("");
+            console.log(req);
           }
         }}
       >
@@ -49,6 +57,11 @@ function LoginForm() {
       >
         Sign out
       </button>
+      {errorMessage !== "" ? (
+        <p className="p-2 bg-red-300 text-red-700 w-full text-center">
+          {errorMessage}
+        </p>
+      ) : null}
     </div>
   );
 }

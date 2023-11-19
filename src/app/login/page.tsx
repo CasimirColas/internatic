@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 function Page() {
   const session = useSession();
-  console.log(session.data?.user?.profilePictureUrl);
+  console.log(session.data?.user);
 
   return (
     <div className="flex flex-col items-center">

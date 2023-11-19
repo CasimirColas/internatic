@@ -13,6 +13,10 @@ export interface SessionUser {
 }
 
 export const authConfig = {
+  pages: {
+    signIn: "/login",
+    signOut: "/",
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
@@ -27,8 +31,7 @@ export const authConfig = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log("No credentials provided");
-          return null;
+          throw new Error("Incomplete credentials");
         }
         const user = await prisma.user.findUnique({
           where: {
@@ -36,8 +39,7 @@ export const authConfig = {
           },
         });
         if (!user) {
-          console.log("No user found");
-          return null;
+          throw new Error("No user found");
         }
 
         // const passswordMatch = bcrypt.compare(credentials.password, user.password);
@@ -46,8 +48,7 @@ export const authConfig = {
           return user as SessionUser;
         }
 
-        console.log("Password does not match");
-        return null;
+        throw new Error("Incorrect password");
       },
     }),
   ],
