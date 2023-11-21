@@ -8,11 +8,7 @@ declare module "next-auth" {
   }
 }
 declare module "next-auth/jwt" {
-  interface JWT {
-    id: string;
-    type: UserType;
-    profilePictureUrl: string | undefined;
-  }
+  interface JWT extends SessionUser {}
 }
 // For Other projects
 

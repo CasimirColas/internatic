@@ -1,68 +1,113 @@
 "use client";
 
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/shadcn/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/shadcn/ui/form";
+import { Input } from "@/components/shadcn/ui/input";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { signOut } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { Github, Linkedin } from "lucide-react";
 
 function LoginForm() {
-  const [loginData, setloginData] = useState({ email: "", password: "" });
   const [errorMessage, seterrorMessage] = useState("");
-  const inputw = "p-2 border border1";
-  return (
-    <div className="p-4 flex flex-col items-center gap-2">
-      <input
-        className={inputw}
-        type="email"
-        required
-        placeholder="example@email.com"
-        value={loginData.email}
-        onChange={(e) => setloginData({ ...loginData, email: e.target.value })}
-      />
-      <input
-        className={inputw}
-        type="password"
-        required
-        placeholder="*********"
-        value={loginData.password}
-        onChange={(e) =>
-          setloginData({ ...loginData, password: e.target.value })
-        }
-      />
-      <button
-        className="p-2 bg-orange-500 text-white w-full"
-        onClick={async (e) => {
-          e.preventDefault();
 
-          const req = await signIn("credentials", {
-            ...loginData,
-            redirect: false,
-          });
-          if (req?.error) {
-            seterrorMessage(req.error);
-          }
-          if (req?.ok) {
-            seterrorMessage("");
-            console.log(req);
-          }
-        }}
+  const FormSchema = z.object({
+    email: z.string().min(2, {
+      message: "Email must be at least 2 characters.",
+    }),
+    password: z.string(),
+  });
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  async function handleSignIn(values: z.infer<typeof FormSchema>) {
+    const req = await signIn("credentials", {
+      ...values,
+      redirect: false,
+    });
+    if (req?.error) {
+      seterrorMessage(req.error);
+    }
+    if (req?.ok) {
+      seterrorMessage("");
+      console.log(req);
+    }
+  }
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((e) => {
+          handleSignIn(e);
+        })}
+        className="space-y-6 w-1/2"
       >
-        Login
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          signOut();
-        }}
-        className="border border-solid w-full border-blue-500 p-2"
-      >
-        Sign out
-      </button>
-      {errorMessage !== "" ? (
-        <p className="p-2 bg-red-300 text-red-700 w-full text-center">
-          {errorMessage}
-        </p>
-      ) : null}
-    </div>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="name@mail.com" type="email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input placeholder="**********" type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {errorMessage !== "" ? (
+          <p className="text-red-500 text-center border border-red-500 rounded-md p-2">
+            {errorMessage}
+          </p>
+        ) : null}
+        <Button type="submit" className="w-full">
+          Log in
+        </Button>
+        <span className="flex w-full justify-center items-center gap-4">
+          <span className="border-t border-gray-500 w-full" />
+          <p className="whitespace-nowrap text-gray-500">or continue with</p>
+          <span className="border-t border-gray-500 w-full" />
+        </span>
+      </form>
+      <div className="flex flex-col gap-2 w-1/2">
+        <Button className="w-full flex items-center gap-2">
+          <Github size={16} />
+          <span>Github</span>
+        </Button>
+        <Button className="w-full flex items-center gap-2">
+          <Linkedin size={16} />
+          <span>LinkedIn</span>
+        </Button>
+      </div>
+    </Form>
   );
 }
 
