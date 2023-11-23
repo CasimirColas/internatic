@@ -19,7 +19,7 @@ function Navbar() {
         <Button asChild variant={"destructive"}>
           <Link href={"/"} className="flex gap-2 items-center">
             <Search size={16} />
-            <span>Browse opportunities</span>
+            <span className="hidden sm:flex">Browse opportunities</span>
           </Link>
         </Button>
         {session.status === "authenticated" ? (
@@ -30,7 +30,9 @@ function Navbar() {
       </div>
       <div className="flex items-center gap-4">
         <h1 className="font-extrabold text-xl">Internatic</h1>
-        <p className="text-xs font-light">powered by Casimir Colas</p>
+        <p className="text-xs font-light hidden sm:flex">
+          powered by Casimir Colas
+        </p>
       </div>
       {session.data?.user ? (
         <ProfileButton user={session.data?.user} />

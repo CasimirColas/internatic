@@ -8,8 +8,9 @@ export const metadata: Metadata = {
 function Page() {
   return (
     <div className="flex h-full bg-login bg-cover justify-end">
-      <div className="flex flex-col items-center w-1/2 justify-center bg-white gap-4">
+      <div className="flex flex-col items-center lg:w-1/2 w-full justify-center bg-white gap-4">
         <h2 className="text-lg font-bold p-4">Log into your Account</h2>
+
         <LoginForm />
       </div>
     </div>

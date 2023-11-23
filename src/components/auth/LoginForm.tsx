@@ -55,7 +55,7 @@ function LoginForm() {
         onSubmit={form.handleSubmit((e) => {
           handleSignIn(e);
         })}
-        className="space-y-6 w-1/2"
+        className="space-y-6 sm:w-1/2 w-10/12"
       >
         <FormField
           control={form.control}
@@ -96,17 +96,17 @@ function LoginForm() {
           <p className="whitespace-nowrap text-gray-500">or continue with</p>
           <span className="border-t border-gray-500 w-full" />
         </span>
+        <div className="flex flex-col gap-2">
+          <Button type="button" className="w-full flex items-center gap-2">
+            <Github size={16} />
+            <span>Github</span>
+          </Button>
+          <Button type="button" className="w-full flex items-center gap-2">
+            <Linkedin size={16} />
+            <span>LinkedIn</span>
+          </Button>
+        </div>
       </form>
-      <div className="flex flex-col gap-2 w-1/2">
-        <Button className="w-full flex items-center gap-2">
-          <Github size={16} />
-          <span>Github</span>
-        </Button>
-        <Button className="w-full flex items-center gap-2">
-          <Linkedin size={16} />
-          <span>LinkedIn</span>
-        </Button>
-      </div>
     </Form>
   );
 }

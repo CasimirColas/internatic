@@ -1,4 +1,5 @@
-import { off } from "process";
+"use server";
+
 import prisma from "../prisma";
 
 export async function getOffers() {
