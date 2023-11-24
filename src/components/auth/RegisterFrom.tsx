@@ -23,8 +23,8 @@ import { Textarea } from "../shadcn/ui/textarea";
 import { useState } from "react";
 import { ArrowBigRight, Check, ArrowBigLeft } from "lucide-react";
 import MultiSelect, { MultiSelectItem } from "../pages/user/ui/MultiSelect";
-import { registerUser } from "@/db/mutatioms/create/registerUser";
-import { RegisterFormClientInput } from "@/db/mutatioms/create/registerUser";
+import { registerUser } from "@/db/mutations/create/registerUser";
+import { RegisterFormClientInput } from "@/db/mutations/create/registerUser";
 import { useRouter } from "next/navigation";
 
 interface RegisterFormProps {
