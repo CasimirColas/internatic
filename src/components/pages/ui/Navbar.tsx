@@ -5,9 +5,12 @@ import Link from "next/link";
 import { Button } from "@/components/shadcn/ui/button";
 import { useSession } from "next-auth/react";
 import ProfileButton from "./ProfileButton";
+import { usePathname } from "next/navigation";
 
 function Navbar() {
   const session = useSession();
+  const pathname = usePathname();
+
   return (
     <nav className="p-2 flex justify-between items-center border-b">
       <div className=" flex justify-center gap-2">
@@ -16,19 +19,21 @@ function Navbar() {
             <Link href={"/dashboard"}>Dashboard</Link>
           </Button>
         ) : null}
-        <Button asChild variant={"destructive"}>
-          <Link href={"/"} className="flex gap-2 items-center">
-            <Search size={16} />
-            <span className="hidden sm:flex">Browse opportunities</span>
-          </Link>
-        </Button>
+        {pathname !== "/" ? (
+          <Button asChild variant={"destructive"}>
+            <Link href={"/"} className="flex gap-2 items-center">
+              <Search size={16} />
+              <span className="hidden sm:flex">Browse opportunities</span>
+            </Link>
+          </Button>
+        ) : null}
         {session.status === "authenticated" ? (
           <Button variant={"ghost"}>
             <span>Create an offer</span>
           </Button>
         ) : null}
       </div>
-      <div className="flex items-center gap-4">
+      <div className="min-[450px]:flex items-center gap-4 hidden">
         <h1 className="font-extrabold text-xl">Internatic</h1>
         <p className="text-xs font-light hidden sm:flex">
           powered by Casimir Colas

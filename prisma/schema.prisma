@@ -45,13 +45,14 @@ model User {
 enum OfferStatus {
   on
   off
+  full
   fulfilled
 }
 
 enum OfferType {
-  stage
-  cdi
-  cdd
+  internship
+  open
+  fixed
 }
 
 model Offer {

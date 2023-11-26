@@ -38,7 +38,8 @@ function LoginForm() {
   async function handleSignIn(values: z.infer<typeof FormSchema>) {
     const req = await signIn("credentials", {
       ...values,
-      redirect: false,
+      redirect: true,
+      callbackUrl: "/",
     });
     if (req?.error) {
       seterrorMessage(req.error);

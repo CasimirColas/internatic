@@ -1,3 +1,5 @@
+"use client";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,7 +27,7 @@ const itemStyle = "p-2 cursor-pointer";
 function ProfileButton({ user }: { user: SessionUser }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button className="flex gap-2 items-center">
           <Avatar className="w-6 h-6">
             <AvatarImage src={user.profilePictureUrl} />

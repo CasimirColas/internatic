@@ -28,7 +28,7 @@ function RegisterPage({ tags }: RegisterPageProps) {
     <div className="flex h-full bg-login bg-cover justify-center">
       <div className="w-1/2 items-center justify-center lg:flex hidden">
         <div className="w-10/12 flex justify-center ">
-          <ProfileCard {...accountData} />
+          <ProfileCard data={accountData} />
         </div>
       </div>
       <div className="flex flex-col items-center lg:w-1/2 w-full justify-center bg-white ">
