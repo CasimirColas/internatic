@@ -93,7 +93,7 @@ function OfferCard(props: OfferCardProps) {
         </p>
       </div>
       <CardHeader>
-        <CardTitle className="flex justify-between">
+        <CardTitle className="flex justify-between text-lg">
           <p>{props.data.title}</p>
         </CardTitle>
       </CardHeader>

@@ -19,13 +19,13 @@ function OfferWrapper({ filter }: { filter: MainPageFilter }) {
   }, [filter]);
 
   return (
-    <div className="flex gap-4 flex-wrap justify-center xl:justify-start   xl:flex-nowrap overflow-auto xl:max-w-[100vw] p-6">
+    <div className="flex gap-4 flex-wrap justify-center xl:justify-start   xl:flex-nowrap xl:overflow-y-auto  w-screen p-6">
       {offers.map((e) => (
         <OfferCard
           key={e.id}
           detailsType="fetch"
           data={e}
-          className="min-w-[350px] w-[350px] max-h-[560px]"
+          className="min-w-[350px] w-[350px] max-h-[570px]"
         />
       ))}
     </div>
