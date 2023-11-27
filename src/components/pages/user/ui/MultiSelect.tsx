@@ -1,14 +1,23 @@
 "use client";
 
-import { Command as CommandPrimitive } from "cmdk";
-import { X } from "lucide-react";
-import { useState, useRef, useCallback, useEffect } from "react";
-import { Badge } from "@/components/shadcn/ui/badge";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/shadcn/ui/popover";
+import { Button } from "@/components/shadcn/ui/button";
+import { Input } from "@/components/shadcn/ui/input";
 import {
   Command,
+  CommandInput,
+  CommandEmpty,
   CommandGroup,
   CommandItem,
 } from "@/components/shadcn/ui/command";
+import { Badge } from "@/components/shadcn/ui/badge";
+import { X } from "lucide-react";
+import { useState } from "react";
+
 import { twMerge } from "tailwind-merge";
 
 export type MultiSelectItem = { value: string; label: string; id: string };
@@ -16,7 +25,7 @@ export type MultiSelectItem = { value: string; label: string; id: string };
 interface MultiSelectProps {
   className?: string;
   options: MultiSelectItem[];
-  set: (value: MultiSelectItem[]) => void;
+  onChange: (value: MultiSelectItem[]) => void;
   value: MultiSelectItem[];
   placeholder?: string;
   htmlFor?: string;
@@ -24,93 +33,69 @@ interface MultiSelectProps {
 
 function MultiSelect({
   options,
-  set,
+  onChange,
   placeholder,
   value,
   htmlFor,
   className,
 }: MultiSelectProps) {
-  const [open, setOpen] = useState(false);
-  const [selectedOptions, setselectedOptions] = useState<MultiSelectItem[]>([]);
-  const handleUnselect = useCallback((framework: MultiSelectItem) => {
-    setselectedOptions((prev) =>
-      prev.filter((s) => s.value !== framework.value)
-    );
-  }, []);
+  const [open, setopen] = useState(false);
 
-  useEffect(() => {
-    set(selectedOptions);
-  }, [selectedOptions]);
-
-  const selectables = options.filter(
-    (framework) => !value.map((e) => e.id).includes(framework.id)
+  const availableOptions = options.filter(
+    (e) => !value.find((f) => f.id === e.id)
   );
 
-  return (
-    <Command
-      className={twMerge("overflow-visible bg-white relative", className)}
-      id={htmlFor}
-    >
-      <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-        <div className="flex gap-1 flex-wrap relative min-h-[22px]">
-          {value.map((framework) => {
-            return (
-              <Badge key={framework.id} variant="secondary" className="z-10">
-                {framework.label}
-                <button
-                  type="button"
-                  className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleUnselect(framework);
-                    }
-                  }}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  onClick={() => handleUnselect(framework)}
-                >
-                  <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                </button>
-              </Badge>
-            );
-          })}
-          {/* Avoid having the "Search" Icon */}
-          <CommandPrimitive.Input
-            value={""}
-            onBlur={() => setOpen(false)}
-            onFocus={() => setOpen(true)}
-            placeholder={value.length < 1 ? placeholder : undefined}
-            className="bg-transparent outline-none placeholder:text-muted-foreground absolute top-0 left-0 w-full h-full caret-transparent"
-          />
-        </div>
-      </div>
+  function addItems(e: MultiSelectItem) {
+    onChange([...value, e]);
+  }
 
-      {open && selectables.length > 0 ? (
-        <div className="absolute w-full z-10 top-12 rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
-          <CommandGroup className="h-full overflow-auto">
-            {selectables.map((framework) => {
-              return (
-                <CommandItem
-                  key={framework.value}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  onSelect={(value) => {
-                    setselectedOptions((prev) => [...prev, framework]);
-                  }}
-                  className={"cursor-pointer"}
-                >
-                  {framework.label}
-                </CommandItem>
-              );
-            })}
+  function removeItem(id: string) {
+    onChange(value.filter((e) => e.id !== id));
+  }
+
+  return (
+    <Popover open={open} onOpenChange={setopen}>
+      <PopoverTrigger asChild className={twMerge("hover:bg-white", className)}>
+        <Button
+          id={htmlFor}
+          variant={"outline"}
+          className="flex flex-wrap gap-1 items-center justify-start"
+          onClick={(e) => {
+            setopen(true);
+          }}
+        >
+          {value.map((e) => (
+            <Badge
+              key={e.id}
+              className="mr-1 flex gap-1 items-center justify-between hover:bg-black"
+            >
+              {e.label}
+              <X size={12} onClick={() => removeItem(e.id)} />
+            </Badge>
+          ))}
+        </Button>
+      </PopoverTrigger>
+
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder={placeholder} />
+          <CommandEmpty>Item no found</CommandEmpty>
+          <CommandGroup>
+            {availableOptions.map((e) => (
+              <CommandItem
+                key={e.id}
+                value={e.value}
+                onSelect={(value) => {
+                  addItems(e);
+                }}
+              >
+                {e.value}
+              </CommandItem>
+            ))}
           </CommandGroup>
-        </div>
-      ) : null}
-    </Command>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
 

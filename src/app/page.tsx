@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   return (
-    <main className="flex flex-col gap-4 bg-gray-50 w-full h-full justify-between items-center pt-14 overflow-auto">
+    <main className="flex flex-col gap-4 bg-main bg-cover w-full h-full justify-between items-center pt-14 overflow-y-auto">
       <HomePage />
     </main>
   );

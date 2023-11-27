@@ -6,7 +6,7 @@ import { Prisma } from "@prisma/client";
 import { authConfig } from "@/pages/api/auth/[...nextauth]";
 
 export type UpdateUserReturn = Exclude<
-  Prisma.PromiseReturnType<typeof getUpdateUser>,
+  Prisma.PromiseReturnType<typeof updateUser>,
   null
 >;
 
@@ -22,7 +22,7 @@ export interface UpdateUserArgs {
   tags?: string[];
 }
 
-export async function getUpdateUser(id: string, args: UpdateUserArgs) {
+export async function updateUser(id: string, args: UpdateUserArgs) {
   const session = await getServerSession(authConfig);
   if (!session) {
     return {
@@ -51,7 +51,6 @@ export async function getUpdateUser(id: string, args: UpdateUserArgs) {
         : undefined,
     },
   });
-
   return {
     success: true,
     message: "Successfully updated the user",

@@ -21,8 +21,8 @@ import {
 } from "@/components/shadcn/ui/tabs";
 import { Textarea } from "../shadcn/ui/textarea";
 import { useState } from "react";
-import { ArrowBigRight, Check, ArrowBigLeft } from "lucide-react";
-import MultiSelect, { MultiSelectItem } from "../pages/user/ui/MultiSelect";
+import { ArrowBigRight, Check, ArrowBigLeft, Tags } from "lucide-react";
+import TagsMultiSelect from "../pages/ui/TagsMultiSelect";
 import { registerUser } from "@/db/mutations/create/registerUser";
 import { RegisterFormClientInput } from "@/db/mutations/create/registerUser";
 import { useRouter } from "next/navigation";
@@ -46,9 +46,7 @@ function RegisterForm({ change, tags }: RegisterFormProps) {
       displayName: "",
       profilePictureUrl: "",
       bio: "",
-      tags: tags.slice(0, 2).map((tag) => {
-        return { label: tag.name, value: tag.name, id: tag.id };
-      }),
+      tags: ["React", "Frontend"],
       password: "",
     }
   );
@@ -327,19 +325,11 @@ function RegisterForm({ change, tags }: RegisterFormProps) {
             <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 my-2">
               Tags
             </label>
-            <MultiSelect
-              placeholder="Select your tags"
-              options={tags.map((tag) => {
-                return { label: tag.name, value: tag.name, id: tag.id };
-              })}
+            <TagsMultiSelect
               value={createUserData.tags}
-              set={(value: MultiSelectItem[]) => {
-                setcreateUserData({ ...createUserData, tags: value });
-                change(
-                  "tags",
-                  value.map((t) => t.value)
-                );
-              }}
+              onChange={(e) =>
+                setcreateUserData({ ...createUserData, tags: e })
+              }
             />
           </div>
           <div className="mt-auto flex gap-4">

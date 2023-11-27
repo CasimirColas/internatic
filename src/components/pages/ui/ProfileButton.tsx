@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
 
-import { LogOut, Settings, MessageCircle, Euro } from "lucide-react";
+import { LogOut, UserCircleIcon, MessageCircle, Euro } from "lucide-react";
 
 import {
   Avatar,
@@ -47,9 +47,9 @@ function ProfileButton({ user }: { user: SessionUser }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Settings size={16} className={iconStyle} />
+          <UserCircleIcon size={16} className={iconStyle} />
           <Link href={`/user/${user.id}`} className={itemStyle}>
-            Settings
+            Profile
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>

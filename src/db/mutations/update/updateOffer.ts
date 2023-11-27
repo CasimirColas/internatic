@@ -6,7 +6,7 @@ import { OfferStatus, OfferType, Prisma } from "@prisma/client";
 import { authConfig } from "@/pages/api/auth/[...nextauth]";
 
 export type UpdateOfferReturn = Exclude<
-  Prisma.PromiseReturnType<typeof getUpdateOffer>,
+  Prisma.PromiseReturnType<typeof updateOffer>,
   null
 >;
 
@@ -23,7 +23,7 @@ export interface UpdateOfferArgs {
   tags?: string[];
 }
 
-export async function getUpdateOffer(id: string, args: UpdateOfferArgs) {
+export async function updateOffer(id: string, args: UpdateOfferArgs) {
   const session = await getServerSession(authConfig);
   if (!session) {
     return {

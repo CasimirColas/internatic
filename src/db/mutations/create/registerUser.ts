@@ -19,7 +19,7 @@ export interface RegisterFormClientInput {
   displayName: string;
   profilePictureUrl?: string;
   bio: string;
-  tags: { value: string; label: string; id: string }[];
+  tags: string[];
   password: string;
 }
 
@@ -38,7 +38,9 @@ export async function registerUser(
         profilePictureUrl: data.profilePictureUrl,
         bio: data.bio,
         tags: {
-          connect: data.tags.map((tag) => ({ id: tag.id })),
+          connect: data.tags.map((tag) => ({
+            name: tag,
+          })),
         },
         password: data.password,
       },

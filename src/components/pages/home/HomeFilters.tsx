@@ -7,9 +7,8 @@ import { MainPageFilter } from "@/db/queries/getOffersFiltered";
 import { useSession } from "next-auth/react";
 import functionalPopup from "../ui/functionalPopup";
 import Link from "next/link";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Star } from "lucide-react";
 import { Input } from "@/components/shadcn/ui/input";
-import { Label } from "@/components/shadcn/ui/label";
 import { Button } from "@/components/shadcn/ui/button";
 import { Search } from "lucide-react";
 
@@ -19,7 +18,8 @@ import {
   PopoverTrigger,
 } from "@/components/shadcn/ui/popover";
 import { Switch } from "@/components/shadcn/ui/switch";
-import { ca } from "date-fns/locale";
+import TagsMultiSelect from "../ui/TagsMultiSelect";
+import { Card } from "@/components/shadcn/ui/card";
 
 function HomeFilters({
   filters,
@@ -91,47 +91,39 @@ function HomeFilters({
 
   const canUse = session.status === "authenticated";
 
+  const inputStyle = "w-full";
+
   return (
-    <div className="flex flex-col w-full gap-2 items-center">
+    <Card className="flex flex-col w-full gap-2 items-center p-4">
       {session.status === "authenticated" ? null : (
-        <h2 className="text-destructive">
+        <h2 className="text-destructive py-4 text-center">
           Login or Register to have acces to more filters
         </h2>
       )}
-      <div className="relative flex items-center w-10/12">
-        <Label htmlFor="search" className="sr-only">
-          Search
-        </Label>
-        <Input
-          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-          placeholder="Search"
-          onChange={(e) => {
-            setfilterData({ ...filterData, title: e.target.value });
-          }}
-          defaultValue={filterData.title}
-        />
-        <Search className="absolute p-1 left-2" />
-      </div>
-      <div className="flex gap-4 justify-around items-center w-10/12 flex-wrap">
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="team">Team:</Label>
-          <Switch
-            disabled={!canUse}
-            id="team"
-            checked={filterData.team ?? false}
-            onCheckedChange={(e) => {
-              checkForAuth(() =>
-                setfilterData({ ...filterData, team: e.valueOf() })
-              );
+
+      <div className="flex gap-4 justify-center items-center w-10/12 flex-wrap">
+        <div className="relative flex items-center w-full">
+          <label htmlFor="search" className="sr-only">
+            Search
+          </label>
+          <Input
+            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+            placeholder="Search"
+            onChange={(e) => {
+              setfilterData({ ...filterData, title: e.target.value });
             }}
+            defaultValue={filterData.title}
           />
+          <Search className="absolute p-1 left-2" />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           <div className="flex flex-col gap-1">
-            <Label>Type of offer:</Label>
+            <label>Type of offer:</label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline">{offerTypeText()}</Button>
+                <Button variant="outline" className={inputStyle}>
+                  {offerTypeText()}
+                </Button>
               </PopoverTrigger>
               <PopoverContent className="flex flex-col w-46 gap-2 bg-slate-100">
                 <Button
@@ -162,7 +154,7 @@ function HomeFilters({
             </Popover>
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="type">Type of contract:</Label>
+            <label htmlFor="type">Type of contract:</label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline">
@@ -207,9 +199,9 @@ function HomeFilters({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="min-salay">Mininum salary:</Label>
+            <label htmlFor="min-salay">Mininum salary:</label>
             <Input
               disabled={!canUse}
               type="number"
@@ -229,7 +221,7 @@ function HomeFilters({
             />
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="max-salay">Maximum salary:</Label>
+            <label htmlFor="max-salay">Maximum salary:</label>
             <Input
               disabled={!canUse}
               type="number"
@@ -249,10 +241,11 @@ function HomeFilters({
             />
           </div>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="from">From:</Label>
+            <label htmlFor="from">From:</label>
             <Input
+              className={inputStyle}
               disabled={!canUse}
               type="date"
               id="from"
@@ -275,8 +268,9 @@ function HomeFilters({
             />
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="to">To:</Label>
+            <label htmlFor="to">To:</label>
             <Input
+              className={inputStyle}
               disabled={!canUse}
               type="date"
               id="to"
@@ -299,46 +293,59 @@ function HomeFilters({
             />
           </div>
         </div>
-
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="rating">Rating:</Label>
-          <Input
-            disabled={!canUse}
-            type="number"
-            id="rating"
-            min={0}
-            max={5}
-            value={filterData.rating}
+        <div className="flex flex-col gap-1 w-full">
+          <label htmlFor="tags">Tags:</label>
+          <TagsMultiSelect
+            value={filterData.tags}
             onChange={(e) => {
-              let value = e.target.valueAsNumber;
-              if (value > 5) value = 5;
-              if (value < 0) value = 0;
-              checkForAuth(() =>
-                setfilterData({
-                  ...filterData,
-                  rating: isNaN(value) ? undefined : value,
-                })
-              );
+              setfilterData({ ...filterData, tags: e });
             }}
+            className="w-full"
+            id="tags"
           />
         </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="tags">Tags:</Label>
-          <MultiSelect
-            className="w-64"
-            options={tags}
-            value={
-              filterData.tags
-                ? tags.filter((e) => filterData?.tags?.includes(e.value))
-                : []
-            }
-            set={(e) => {
-              setfilterData({ ...filterData, tags: e.map((e) => e.value) });
-            }}
-          />
+        <div className="flex items-center gap-8 justify-center w-full">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="team">Team:</label>
+            <Switch
+              disabled={!canUse}
+              id="team"
+              checked={filterData.team ?? false}
+              onCheckedChange={(e) => {
+                checkForAuth(() =>
+                  setfilterData({ ...filterData, team: e.valueOf() })
+                );
+              }}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label htmlFor="rating">Rating:</label>
+            <div className="flex gap-2 items-center">
+              <Input
+                disabled={!canUse}
+                type="number"
+                id="rating"
+                min={0}
+                max={5}
+                value={filterData.rating}
+                onChange={(e) => {
+                  let value = e.target.valueAsNumber;
+                  if (value > 5) value = 5;
+                  if (value < 0) value = 0;
+                  checkForAuth(() =>
+                    setfilterData({
+                      ...filterData,
+                      rating: isNaN(value) ? undefined : value,
+                    })
+                  );
+                }}
+              />
+              <Star size={24} />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 

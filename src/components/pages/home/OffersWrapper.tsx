@@ -19,7 +19,7 @@ function OfferWrapper({ filter }: { filter: MainPageFilter }) {
   }, [filter]);
 
   return (
-    <div className="flex gap-4 flex-wrap justify-center xl:justify-start   xl:flex-nowrap xl:overflow-y-auto  w-screen p-6">
+    <div className="flex gap-4 lg:flex-wrap lg:justify-center w-full max-w-[95vw] overflow-x-auto">
       {offers.map((e) => (
         <OfferCard
           key={e.id}

@@ -10,9 +10,8 @@ import { usePathname } from "next/navigation";
 function Navbar() {
   const session = useSession();
   const pathname = usePathname();
-
   return (
-    <nav className="p-2 flex justify-between items-center border-b">
+    <nav className="p-2 flex justify-between items-center border-b w-full sticky z-20 bg-white">
       <div className=" flex justify-center gap-2">
         {session.data?.user?.type === "admin" ? (
           <Button asChild variant={"destructive"}>
@@ -27,7 +26,8 @@ function Navbar() {
             </Link>
           </Button>
         ) : null}
-        {session.status === "authenticated" ? (
+        {session.status === "authenticated" &&
+        !pathname?.startsWith("/user") ? (
           <Button variant={"ghost"}>
             <span>Create an offer</span>
           </Button>

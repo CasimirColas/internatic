@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth/next";
 import { authConfig } from "@/pages/api/auth/[...nextauth]";
 import Navbar from "@/components/pages/ui/Navbar";
 import { twMerge } from "tailwind-merge";
+import { Toaster } from "@/components/shadcn/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,11 +24,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={twMerge(inter.className, "h-screen w-screen flex flex-col")}
+        className={twMerge(inter.className, "h-screen w-full flex flex-col")}
       >
         <Provider session={session}>
           <Navbar />
           {children}
+          <Toaster />
         </Provider>
       </body>
     </html>

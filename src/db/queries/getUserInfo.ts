@@ -18,7 +18,7 @@ export async function getUserInfo(id: string) {
       message: "You are not authenticated",
     };
   }
-  if (session.user.id !== id || session.user.type !== "admin") {
+  if (session.user.id !== id && session.user.type !== "admin") {
     return {
       success: false,
       message: "You are not authorized to perform this action",
@@ -27,6 +27,14 @@ export async function getUserInfo(id: string) {
   const user = await prisma.user.findUnique({
     where: {
       id: id,
+    },
+    include: {
+      tags: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
   return {

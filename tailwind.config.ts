@@ -72,6 +72,8 @@ module.exports = {
       },
       backgroundImage: {
         login: "url('/login-register.jpg')",
+        user: "url('/user.jpg')",
+        main: "url('/main.jpg')",
       },
     },
   },

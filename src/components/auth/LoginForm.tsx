@@ -16,9 +16,11 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { Github, Linkedin } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 function LoginForm() {
   const [errorMessage, seterrorMessage] = useState("");
+  const router = useRouter();
 
   const FormSchema = z.object({
     email: z.string().min(2, {
@@ -38,8 +40,7 @@ function LoginForm() {
   async function handleSignIn(values: z.infer<typeof FormSchema>) {
     const req = await signIn("credentials", {
       ...values,
-      redirect: true,
-      callbackUrl: "/",
+      redirect: false,
     });
     if (req?.error) {
       seterrorMessage(req.error);
@@ -47,6 +48,7 @@ function LoginForm() {
     if (req?.ok) {
       seterrorMessage("");
       console.log(req);
+      router.push("/");
     }
   }
 
