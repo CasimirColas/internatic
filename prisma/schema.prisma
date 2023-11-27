@@ -89,8 +89,8 @@ model Tag {
 
 type Message {
   id                String @db.ObjectId
-  displayName       String
-  profilePictureUrl String
+  displayName       String?
+  profilePictureUrl String?
   message           String
 }
 
