@@ -88,6 +88,7 @@ function OfferCard(props: OfferCardProps) {
       />
       <div className="absolute flex items-center pt-2 pr-2 w-full justify-end">
         <p className="bg-black text-white p-2 rounded-lg">
+          {props.data.isOffering ? "Job offer" : "Developper"} for{" "}
           {props.data.salary}$
         </p>
       </div>

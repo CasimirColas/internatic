@@ -11,9 +11,6 @@ function HomePage() {
   const [filters, setfilters] = useState<MainPageFilter>({
     isOffering: true,
   });
-
-  console.log("filters", filters);
-
   return (
     <>
       <HomeFilters filters={filters} onChange={setfilters} />
