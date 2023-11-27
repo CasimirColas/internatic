@@ -1,7 +1,7 @@
 "use client";
 
 import { UserInfoReturn } from "@/db/queries/getUserInfo";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { UpdateUserArgs } from "@/db/mutations/update/updateUser";
 import DetailedUserProfile from "./user/ui/DetailedUserProfile";
 import { Settings } from "lucide-react";
@@ -14,7 +14,6 @@ import { deleteUser } from "@/db/mutations/delete/deleteUser";
 import { signOut } from "next-auth/react";
 import TagsMultiSelect from "./ui/TagsMultiSelect";
 import { useToast } from "../shadcn/ui/use-toast";
-import { revalidatePath } from "next/cache";
 import { refreshPath } from "@/server/refrechPath";
 import { Card } from "../shadcn/ui/card";
 
