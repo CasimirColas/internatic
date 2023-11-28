@@ -24,6 +24,8 @@ export interface UpdateOfferArgs {
 }
 
 export async function updateOffer(id: string, args: UpdateOfferArgs) {
+  console.log(args);
+
   const session = await getServerSession(authConfig);
   if (!session) {
     return {

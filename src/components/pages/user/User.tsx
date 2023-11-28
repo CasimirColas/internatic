@@ -3,19 +3,19 @@
 import { UserInfoReturn } from "@/db/queries/getUserInfo";
 import { useState } from "react";
 import { UpdateUserArgs } from "@/db/mutations/update/updateUser";
-import DetailedUserProfile from "./user/ui/DetailedUserProfile";
+import DetailedUserProfile from "./ui/DetailedUserProfile";
 import { Settings } from "lucide-react";
-import { Button } from "../shadcn/ui/button";
-import { Dialog, DialogContent } from "../shadcn/ui/dialog";
-import { Input } from "../shadcn/ui/input";
-import { Textarea } from "../shadcn/ui/textarea";
+import { Button } from "../../shadcn/ui/button";
+import { Dialog, DialogContent } from "../../shadcn/ui/dialog";
+import { Input } from "../../shadcn/ui/input";
+import { Textarea } from "../../shadcn/ui/textarea";
 import { updateUser } from "@/db/mutations/update/updateUser";
 import { deleteUser } from "@/db/mutations/delete/deleteUser";
 import { signOut } from "next-auth/react";
-import TagsMultiSelect from "./ui/TagsMultiSelect";
-import { useToast } from "../shadcn/ui/use-toast";
+import TagsMultiSelect from "../ui/TagsMultiSelect";
+import { useToast } from "../../shadcn/ui/use-toast";
 import { refreshPath } from "@/server/refrechPath";
-import { Card } from "../shadcn/ui/card";
+import { Card } from "../../shadcn/ui/card";
 
 interface UserPageProps {
   user: UserInfoReturn["data"];

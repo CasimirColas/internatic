@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/db/prisma";
+import { off } from "process";
 
 interface ApplyToOfferArgs {
   offerId: string;
@@ -15,6 +16,7 @@ export async function applyToOffer(args: ApplyToOfferArgs) {
     },
     select: {
       id: true,
+      positions: true,
       postedById: true,
       interestedInIds: true,
     },
@@ -56,6 +58,8 @@ export async function applyToOffer(args: ApplyToOfferArgs) {
       id: offerId,
     },
     data: {
+      status:
+        offer.positions < offer.interestedInIds.length + 1 ? "full" : undefined,
       interestedIn: {
         connect: {
           id: userId,

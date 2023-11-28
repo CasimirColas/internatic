@@ -18,19 +18,45 @@ export async function getUserOffers(id: string) {
       message: "You are not authenticated",
     };
   }
-  if (session.user.id !== id || session.user.type !== "admin") {
+  if (session.user.id !== id && session.user.type !== "admin") {
     return {
       success: false,
       message: "You are not authorized to perform this action",
     };
   }
-  const offers = await prisma.offer.findMany({
+  const myOffers = await prisma.offer.findMany({
     where: {
       postedById: id,
+    },
+    include: {
+      tags: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+    },
+  });
+  const interestedOffers = await prisma.offer.findMany({
+    where: {
+      interestedInIds: {
+        has: id,
+      },
+    },
+  });
+  const workingOffers = await prisma.offer.findMany({
+    where: {
+      workingOnIds: {
+        has: id,
+      },
     },
   });
   return {
     success: true,
-    data: offers,
+    data: {
+      myOffers,
+      interestedOffers,
+      workingOffers,
+    },
   };
 }

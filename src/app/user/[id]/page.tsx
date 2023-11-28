@@ -1,4 +1,4 @@
-import UserPage from "@/components/pages/User";
+import UserPage from "@/components/pages/user/User";
 import { getUserInfo } from "@/db/queries/getUserInfo";
 
 async function Page({ params }: { params: { id: string } }) {
